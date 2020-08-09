@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+        <system>
+            <tab id="nimbus_cta_color_change" translate="label" sortOrder="777">
+                <label>CTA Color Change</label>
+            </tab>
+            <section id="nimbus_cta_color_change" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>CTA Color Change</label>
+                <tab>nimbus_cta_color_change</tab>
+                <resource>Nimbus_CTAColorChange::button</resource>
+                <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>General</label>
+                    <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled?</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Color</label>
+                        <comment>The hexadecimal color to use on the text. Example: #FFFFFF</comment>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="bg_color" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Background</label>
+                        <comment>The hexadecimal color to use as background. Example: #000000</comment>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </section>
+        </system>
+</config>

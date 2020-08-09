@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="nimbsu_cta_color_change" xsi:type="object">Nimbus\CTAColorChange\Console\Command\ButtonColorChange</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
