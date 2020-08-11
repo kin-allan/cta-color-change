@@ -2,28 +2,56 @@
 
 namespace Nimbus\CTAColorChange\Block\Product;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Block\Product\Context;
+use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
+use Magento\Framework\Json\EncoderInterface as JsonEncoderInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Nimbus\CTAColorChange\Model\Config;
 
 class View extends \Magento\Catalog\Block\Product\View {
 
-    protected $scopeConfig;
+    /**
+     * @var Config
+     */
+    protected $config;
 
+    /**
+     * View constructor
+     * @param Context                    $context
+     * @param UrlEncoderInterface        $urlEncoder
+     * @param JsonEncoderInterface       $jsonEncoder
+     * @param StringUtils                $string
+     * @param Product                    $productHelper
+     * @param ConfigInterface            $productTypeConfig
+     * @param FormatInterface            $localeFormat
+     * @param CustomerSession            $customerSession
+     * @param ProductRepositoryInterface $productRepository
+     * @param PriceCurrencyInterface     $priceCurrency
+     * @param Config                     $config
+     * @param array                      $data
+     */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Customer\Model\Session $customerSession,
+        Context $context,
+        UrlEncoderInterface $urlEncoder,
+        JsonEncoderInterface $jsonEncoder,
+        StringUtils $string,
+        Product $productHelper,
+        ConfigInterface $productTypeConfig,
+        FormatInterface $localeFormat,
+        CustomerSession $customerSession,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        PriceCurrencyInterface $priceCurrency,
+        Config $config,
         array $data = [])
     {
-        $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
 
         parent::__construct(
             $context,
@@ -40,18 +68,30 @@ class View extends \Magento\Catalog\Block\Product\View {
         );
     }
 
+    /**
+     * Check if the module is enabled
+     * @return boolean
+     */
     public function isCTAColorChangeEnable()
     {
-        return $this->scopeConfig->getValue("nimbus_cta_color_change/general/enabled", ScopeInterface::SCOPE_STORE) == 1 ? true : false;
+        return $this->config->isEnabled();
     }
 
+    /**
+     * Get the button text color setting
+     * @return string
+     */
     public function getTextColor()
     {
-        return "#" . ltrim($this->scopeConfig->getValue("nimbus_cta_color_change/general/color", ScopeInterface::SCOPE_STORE), "#");
+        return "#" . ltrim($this->config->getTextColor(), "#");
     }
 
+    /**
+     * Get the button background text color setting
+     * @return string
+     */
     public function getBackgroundColor()
     {
-        return "#" . ltrim($this->scopeConfig->getValue("nimbus_cta_color_change/general/bg_color", ScopeInterface::SCOPE_STORE), "#");
+        return "#" . ltrim($this->config->getBackgroundColor(), "#");
     }
 }

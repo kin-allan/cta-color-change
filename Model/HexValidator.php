@@ -4,6 +4,11 @@ namespace Nimbus\CTAColorChange\Model;
 
 class HexValidator {
 
+    /**
+     * Check if the string is a hexadecimal color
+     * @param  string $hexColor
+     * @return boolean
+     */
     public function validate($hexColor)
     {
         $hexColor = trim(ltrim($hexColor, "#"));

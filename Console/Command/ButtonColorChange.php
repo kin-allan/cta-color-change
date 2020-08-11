@@ -2,35 +2,65 @@
 
 namespace Nimbus\CTAColorChange\Console\Command;
 
-use Symfony\Component\Console\{
-    Command\Command,
-    Input\InputInterface,
-    Input\InputArgument,
-    Input\InputOption,
-    Output\OutputInterface
-};
-
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
+use Nimbus\CTAColorChange\Model\Config;
+use Nimbus\CTAColorChange\Model\HexValidator;
 
 class ButtonColorChange extends Command {
 
+    /**
+     * Console command param that holds the background color to set
+     */
     CONST BG_COLOR      = 'bg_color';
+
+    /**
+     * Console command param that holds the store id
+     */
     CONST STORE_ID      = 'store_id';
 
+    /**
+     * @var State
+     */
     protected $state;
+
+    /**
+     * @var ProcessorFacadeFactory
+     */
     protected $processorFacadeFactory;
+
+    /**
+     * @var StoreRepositoryInterface
+     */
     protected $storeRepository;
+
+    /**
+     * @var HexValidator
+     */
     protected $hexValidator;
 
+    /**
+     * ButtonColorChange constructor.
+     * @param State                    $state
+     * @param ProcessorFacadeFactory   $processorFacadeFactory
+     * @param StoreRepositoryInterface $storeRepository
+     * @param HexValidator             $hexValidator
+     */
     public function __construct(
-        \Magento\Framework\App\State $state,
-        \Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory $processorFacadeFactory,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Nimbus\CTAColorChange\Model\HexValidator $hexValidator
-        )
-    {
+        State $state,
+        ProcessorFacadeFactory $processorFacadeFactory,
+        StoreRepositoryInterface $storeRepository,
+        HexValidator $hexValidator
+    ) {
         $this->state                    = $state;
         $this->processorFacadeFactory   = $processorFacadeFactory;
         $this->storeRepository          = $storeRepository;
@@ -39,6 +69,9 @@ class ButtonColorChange extends Command {
         parent::__construct();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $options = [
@@ -53,6 +86,9 @@ class ButtonColorChange extends Command {
         parent::configure();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
@@ -76,7 +112,7 @@ class ButtonColorChange extends Command {
 
                 if ($bgColor) {
                     if ($this->hexValidator->validate($bgColor)) {
-                        $processorFacade->process("nimbus_cta_color_change/general/bg_color", $bgColor, ScopeInterface::SCOPE_STORE, $store->getCode(), false);
+                        $processorFacade->process(Config::XML_PATH_BGCOLOR, $bgColor, ScopeInterface::SCOPE_STORE, $store->getCode(), false);
                         $output->writeln("<info>CTA styles updated for store \"" . $store->getName() . "\". Please refresh cache.</info>");
                         return Cli::RETURN_SUCCESS;
                     } else {

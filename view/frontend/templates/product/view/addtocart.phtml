@@ -1,6 +1,8 @@
-<?php $_product = $block->getProduct(); ?>
-<?php $buttonTitle = __('Add to Cart'); ?>
-<?php $isCTAColorChangeEnabled = $block->isCTAColorChangeEnable(); ?>
+<?php 
+    $_product = $block->getProduct();
+    $buttonTitle = __('Add to Cart');
+    $isCTAColorChangeEnabled = $block->isCTAColorChangeEnable();
+?>
 <?php if ($_product->isSaleable()) :?>
 <div class="box-tocart">
     <div class="fieldset">
