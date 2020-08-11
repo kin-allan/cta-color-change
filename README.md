@@ -8,7 +8,7 @@
 <ul>
     <li>1. Go to the Magento root directory</li>
     <li>1. Run the command: <code>composer config repositories.kin-allan-cta-color-change git https://github.com/kin-allan/cta-color-change</code></li>
-    <li>2. Then: <code>composer require kin-allan/cta-color-change:1.0.0</code></li>
+    <li>2. Then: <code>composer require kin-allan/cta-color-change:1.0.1</code></li>
     <li>3. After the composer process is finished, run those commands:</li>
     <li><code>php bin/magento module Nimbus_CTAColorChange</code></li>
     <li><code>php bin/magento setup:upgrade</code></li>
